@@ -1,0 +1,8 @@
+name: SurvivalGames
+author: FancyPlay
+version: 0.0.1
+main: de.fancy.survivalgames.Main
+commands:
+  stats:
+  start:
+  setup:
