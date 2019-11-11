@@ -248,6 +248,7 @@ public class GameManager {
     public void setPlayerAsSpectator(Player player) {
         if(Main.getInstance().getCurrentState() != Gamestate.ENDING) {
             player.setScoreboard(Main.getInstance().getScoreboard());
+            player.spigot().setCollidesWithEntities(false);
 
             if(Main.getInstance().getSurvivor().getPlayers().contains(player)) {
                 Main.getInstance().getSurvivor().removePlayer(player);
@@ -434,7 +435,7 @@ public class GameManager {
     }
 
     public boolean isValidPlayerZombie(LivingEntity entity) {
-        if(playerZombies.containsValue(entity)) {
+        if(playerZombies.containsKey(entity)) {
             return true;
         } else {
             return false;
@@ -496,75 +497,81 @@ public class GameManager {
             }
         });
 
-        if(Main.getInstance().getLivingPlayers().size() == 1) {
-            Player winner = Main.getInstance().getLivingPlayers().get(0);
+        Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                if(Main.getInstance().getLivingPlayers().size() == 1) {
+                    Player winner = Main.getInstance().getLivingPlayers().get(0);
 
-            Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    MySQL.addPlayerStatistic(player.getUniqueId(), "wgames");
+                    MySQL.addPlayerStatistic(winner.getUniqueId(), "wgames");
+
+                    for(Player allPlayers : Bukkit.getOnlinePlayers()) {
+                        allPlayers.teleport((Location) Main.getInstance().getMapManager().getMapValue("Waiting", "SPAWN"));
+                        setPlayerEquipment(allPlayers, Gamestate.ENDING);
+                        allPlayers.removePotionEffect(PotionEffectType.INVISIBILITY);
+                        allPlayers.setHealth(20);
+                        allPlayers.setFoodLevel(20);
+                        player.setAllowFlight(false);
+
+                        for(OfflinePlayer spectatingPlayer : Main.getInstance().getSpectator().getPlayers()) {
+                            allPlayers.showPlayer((Player) spectatingPlayer);
+                        }
+
+                        Main.getInstance().getSurvivor().addPlayer(allPlayers);
+
+                        allPlayers.sendMessage(Main.getInstance().getPrefix() + winner.getDisplayName() + " §7hat das Spiel §agewonnen§7!");
+                        allPlayers.sendTitle(winner.getDisplayName(), "§7hat die Runde gewonnen!");
+                    }
+
+                    GameCountdown gameCountdown = Main.getInstance().getGameCountdown();
+
+                    gameCountdown.cancel();
+
+                    Main.getInstance().setCurrentState(Gamestate.ENDING);
+
+                    gameCountdown.setNextGamestate(Gamestate.LOBBY);
+                    gameCountdown.setCountdown(30);
+                    gameCountdown.setLevelChange(true);
+
+                    Main.getInstance().getLivingPlayers().remove(0);
+
+                    Location waitingLocation = (Location) Main.getInstance().getMapManager().getMapValue("Waiting", "SPAWN");
+                    waitingLocation.getWorld().spawnEntity(waitingLocation, EntityType.FIREWORK);
+                } else if(Main.getInstance().getLivingPlayers().size() == 0) {
+                    for(Player allPlayers : Bukkit.getOnlinePlayers()) {
+                        allPlayers.teleport((Location) Main.getInstance().getMapManager().getMapValue("Waiting", "SPAWN"));
+                        setPlayerEquipment(allPlayers, Gamestate.ENDING);
+                        allPlayers.removePotionEffect(PotionEffectType.INVISIBILITY);
+                        allPlayers.setHealth(20);
+                        allPlayers.setFoodLevel(20);
+                        player.setAllowFlight(false);
+
+                        for(OfflinePlayer spectatingPlayer : Main.getInstance().getSpectator().getPlayers()) {
+                            allPlayers.showPlayer((Player) spectatingPlayer);
+                        }
+
+                        Main.getInstance().getSurvivor().addPlayer(allPlayers);
+
+                        allPlayers.sendMessage(Main.getInstance().getPrefix() + "§7Es gibt §ckeinen §7Gewinner!");
+
+                        allPlayers.sendTitle("§cNiemand", "§7hat die Runde gewonnen!");
+                    }
+
+                    GameCountdown gameCountdown = Main.getInstance().getGameCountdown();
+
+                    gameCountdown.cancel();
+
+                    Main.getInstance().setCurrentState(Gamestate.ENDING);
+
+                    gameCountdown.setNextGamestate(Gamestate.LOBBY);
+                    gameCountdown.setCountdown(30);
+                    gameCountdown.setLevelChange(true);
+
+                    Location waitingLocation = (Location) Main.getInstance().getMapManager().getMapValue("Waiting", "SPAWN");
+                    waitingLocation.getWorld().spawnEntity(waitingLocation, EntityType.FIREWORK);
                 }
-            });
-
-            for(Player allPlayers : Bukkit.getOnlinePlayers()) {
-                allPlayers.teleport((Location) Main.getInstance().getMapManager().getMapValue("Waiting", "SPAWN"));
-                setPlayerEquipment(allPlayers, Gamestate.ENDING);
-                allPlayers.removePotionEffect(PotionEffectType.INVISIBILITY);
-
-                for(OfflinePlayer spectatingPlayer : Main.getInstance().getSpectator().getPlayers()) {
-                    allPlayers.showPlayer((Player) spectatingPlayer);
-                }
-
-                Main.getInstance().getSurvivor().addPlayer(allPlayers);
-
-                allPlayers.sendMessage(Main.getInstance().getPrefix() + winner.getDisplayName() + " §7hat das Spiel §agewonnen§7!");
-                allPlayers.sendTitle(winner.getDisplayName(), "§7hat die Runde gewonnen!");
             }
-
-            GameCountdown gameCountdown = Main.getInstance().getGameCountdown();
-
-            gameCountdown.cancel();
-
-            Main.getInstance().setCurrentState(Gamestate.ENDING);
-
-            gameCountdown.setNextGamestate(Gamestate.LOBBY);
-            gameCountdown.setCountdown(30);
-            gameCountdown.setLevelChange(true);
-
-            Main.getInstance().getLivingPlayers().remove(0);
-
-            Location waitingLocation = (Location) Main.getInstance().getMapManager().getMapValue("Waiting", "SPAWN");
-            waitingLocation.getWorld().spawnEntity(waitingLocation, EntityType.FIREWORK);
-        } else if(Main.getInstance().getLivingPlayers().size() == 0) {
-            for(Player allPlayers : Bukkit.getOnlinePlayers()) {
-                allPlayers.teleport((Location) Main.getInstance().getMapManager().getMapValue("Waiting", "SPAWN"));
-                setPlayerEquipment(allPlayers, Gamestate.ENDING);
-                allPlayers.removePotionEffect(PotionEffectType.INVISIBILITY);
-
-                for(OfflinePlayer spectatingPlayer : Main.getInstance().getSpectator().getPlayers()) {
-                    allPlayers.showPlayer((Player) spectatingPlayer);
-                }
-
-                Main.getInstance().getSurvivor().addPlayer(allPlayers);
-
-                allPlayers.sendMessage(Main.getInstance().getPrefix() + "§7Es gibt §ckeinen §7Gewinner!");
-
-                allPlayers.sendTitle("§cNiemand", "§7hat die Runde gewonnen!");
-            }
-
-            GameCountdown gameCountdown = Main.getInstance().getGameCountdown();
-
-            gameCountdown.cancel();
-
-            Main.getInstance().setCurrentState(Gamestate.ENDING);
-
-            gameCountdown.setNextGamestate(Gamestate.LOBBY);
-            gameCountdown.setCountdown(30);
-            gameCountdown.setLevelChange(true);
-
-            Location waitingLocation = (Location) Main.getInstance().getMapManager().getMapValue("Waiting", "SPAWN");
-            waitingLocation.getWorld().spawnEntity(waitingLocation, EntityType.FIREWORK);
-        }
+        }, 40);
     }
 
     public ItemStack createColoredArmor(Material material, Color color) {

@@ -9,6 +9,7 @@ public class GameCountdown implements Runnable {
     Gamestate nextGamestate;
     int taskID = -1;
     boolean levelChange;
+    boolean isActive;
 
     public GameCountdown() {
     }
@@ -29,6 +30,14 @@ public class GameCountdown implements Runnable {
         this.levelChange = isEnabled;
     }
 
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public boolean getActive() {
+        return this.isActive;
+    }
+
     public int getCountdown() {
         return this.countdown;
     }
@@ -44,6 +53,7 @@ public class GameCountdown implements Runnable {
     @Override
     public void run() {
         this.countdown--;
+        this.isActive = true;
 
         if(this.levelChange == true) {
             for(Player allPlayers : Bukkit.getOnlinePlayers()) {
@@ -64,5 +74,7 @@ public class GameCountdown implements Runnable {
 
     public void cancel() {
         Bukkit.getScheduler().cancelTask(this.taskID);
+        this.isActive = false;
+        this.taskID = -1;
     }
 }

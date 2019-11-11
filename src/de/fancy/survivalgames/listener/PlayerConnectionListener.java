@@ -70,13 +70,15 @@ public class PlayerConnectionListener implements Listener {
 
         if(Main.getInstance().getCurrentState() == Gamestate.LOBBY) {
             if((int) Main.getInstance().getMapManager().getMapValue(Main.getInstance().getCurrentMap(), "MINPLAYER") <= Bukkit.getOnlinePlayers().size()) {
-                GameCountdown gameStart = Main.getInstance().getGameCountdown();
-                gameStart.setCountdown(60);
-                gameStart.setLevelChange(true);
-                gameStart.setNextGamestate(Gamestate.PREPARATION);
-                if (gameStart.getTaskID() == -1) {
-                    int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), gameStart, 0, 20);
-                    gameStart.setTaskID(task);
+                if(!Main.getInstance().getGameCountdown().getActive() == true) {
+                    GameCountdown gameStart = Main.getInstance().getGameCountdown();
+                    gameStart.setCountdown(60);
+                    gameStart.setLevelChange(true);
+                    gameStart.setNextGamestate(Gamestate.PREPARATION);
+                    if (gameStart.getTaskID() == -1) {
+                        int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), gameStart, 0, 20);
+                        gameStart.setTaskID(task);
+                    }
                 }
             }
         }
@@ -105,7 +107,7 @@ public class PlayerConnectionListener implements Listener {
                             Main.getInstance().getPrefix() + "§7Es leben noch §a" + Main.getInstance().livingPlayers.size() + " §7Spieler!");
                 }
 
-                Main.getInstance().getGameManager().removePlayerFromGame(player);
+                //Main.getInstance().getGameManager().removePlayerFromGame(player);
                 Main.getInstance().getGameManager().createPlayerZombie(player);
             }
         }

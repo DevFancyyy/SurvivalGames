@@ -74,7 +74,7 @@ public class PlayerInteractionListener implements Listener {
 
             if(Main.getInstance().getCurrentState() == Gamestate.PROTECTION || Main.getInstance().getCurrentState() == Gamestate.INGAME || Main.getInstance().getCurrentState() == Gamestate.DEATHMATCH) {
                 if(!Main.getInstance().getSpectator().getPlayers().contains(player)) {
-                    if (clickedBlock != null && (clickedBlock.getType() == Material.LEAVES || clickedBlock.getType() == Material.LEAVES_2 || clickedBlock.getType() == Material.WEB)) {
+                    if (clickedBlock != null && (clickedBlock.getType() == Material.LEAVES || clickedBlock.getType() == Material.LEAVES_2 || clickedBlock.getType() == Material.WEB || clickedBlock.getType() == Material.LONG_GRASS ||clickedBlock.getType() == Material.CAKE_BLOCK)) {
                         return;
                     } else {
                         event.setCancelled(true);
@@ -132,14 +132,14 @@ public class PlayerInteractionListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if((Main.getInstance().getCurrentState() != Gamestate.PROTECTION || Main.getInstance().getCurrentState() != Gamestate.INGAME && Main.getInstance().getCurrentState() != Gamestate.DEATHMATCH) || Main.getInstance().getSpectator().getPlayers().contains(event.getPlayer())) {
+        if(!(Main.getInstance().getCurrentState() == Gamestate.PROTECTION || Main.getInstance().getCurrentState() == Gamestate.INGAME || Main.getInstance().getCurrentState() == Gamestate.DEATHMATCH) || Main.getInstance().getSpectator().getPlayers().contains(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
      @EventHandler
      public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-         if((Main.getInstance().getCurrentState() != Gamestate.PROTECTION || Main.getInstance().getCurrentState() != Gamestate.INGAME && Main.getInstance().getCurrentState() != Gamestate.DEATHMATCH) || Main.getInstance().getSpectator().getPlayers().contains(event.getPlayer())) {
+         if(!(Main.getInstance().getCurrentState() == Gamestate.PROTECTION || Main.getInstance().getCurrentState() == Gamestate.INGAME || Main.getInstance().getCurrentState() == Gamestate.DEATHMATCH) || Main.getInstance().getSpectator().getPlayers().contains(event.getPlayer())) {
              event.setCancelled(true);
          }
      }
@@ -207,7 +207,7 @@ public class PlayerInteractionListener implements Listener {
 
     @EventHandler
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
-        if((Main.getInstance().getCurrentState() != Gamestate.PROTECTION || Main.getInstance().getCurrentState() != Gamestate.INGAME && Main.getInstance().getCurrentState() != Gamestate.DEATHMATCH) || Main.getInstance().getSpectator().getPlayers().contains(event.getEntity())) {
+        if(!(Main.getInstance().getCurrentState() == Gamestate.PROTECTION || Main.getInstance().getCurrentState() == Gamestate.INGAME || Main.getInstance().getCurrentState() == Gamestate.DEATHMATCH) || Main.getInstance().getSpectator().getPlayers().contains(event.getEntity())) {
             event.setCancelled(true);
         }
     }

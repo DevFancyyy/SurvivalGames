@@ -39,11 +39,11 @@ public class PlayerKillListener implements Listener {
                 Achievements.addAchievement(killer, Achievements.FIRST_KILL);
             }
 
-            if(player.getName() == "FancyPlay") {
+            if(player.getName().equals("FancyPlay")) {
                 Achievements.addAchievement(killer, Achievements.FANCYMODE);
             }
 
-            if(killer.getHealth() == 1) {
+            if(killer.getHealth() <= 1) {
                 Achievements.addAchievement(killer, Achievements.LUCKY);
             }
 

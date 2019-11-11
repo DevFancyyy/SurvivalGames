@@ -46,6 +46,7 @@ public class CMD_Setup implements CommandExecutor {
                     player.sendMessage("§a/setup <start | end>§7: Betrete/Verlasse den Setup-Mode");
                     player.sendMessage("§a/setup Waiting <setspawn | setworld>§7: Setze den Spawn / die Welt der Wartelobby");
                     player.sendMessage("§a/setup map list§7: Liste alle Maps auf");
+                    player.sendMessage("§a/setup map <map> info>§7: Infos zur Map");
                     player.sendMessage("§a/setup map <create | delete> <mapname>§7: Erstelle / Lösche eine Welt");
                     player.sendMessage("§a/setup map <map> spawn add§7: Erstelle einen Spawnpunkt");
                     player.sendMessage("§a/setup map <map> spawn list§7: Liste die Spawnpunkte einer Map auf");
@@ -93,6 +94,16 @@ public class CMD_Setup implements CommandExecutor {
                             if(Main.getInstance().getMapManager().doesMapExist(args[2])) {
                                 Main.getInstance().getMapManager().deleteMap(args[2]);
                                 player.sendMessage(Main.getInstance().getPrefix() + "§7Die Map §c" + args[2].toString() + "§7 wurde gelöscht!");
+                            } else {
+                                player.sendMessage(Main.getInstance().getPrefix() + "§cDiese Map existiert nicht!");
+                            }
+                        } else if(args[1].equalsIgnoreCase("info")) {
+                            if(Main.getInstance().getMapManager().doesMapExist(args[2])) {
+                                String map = args[2];
+                                player.sendMessage(Main.getInstance().getPrefix() + "§7Infos über die Map §a" + map + "§7:");
+                                player.sendMessage(Main.getInstance().getPrefix() + "§7Minimale Spieler: §a" + Main.getInstance().getMapManager().getMapValue(map, "MINPLAYER"));
+                                player.sendMessage(Main.getInstance().getPrefix() + "§7Maximale Spieler: §a" + Main.getInstance().getMapManager().getMapValue(map, "MAXPLAYER"));
+                                player.sendMessage(Main.getInstance().getPrefix() + "§7Bordergröße: §a" + Main.getInstance().getMapManager().getMapValue(map, "BORDER"));
                             } else {
                                 player.sendMessage(Main.getInstance().getPrefix() + "§cDiese Map existiert nicht!");
                             }
