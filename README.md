@@ -36,6 +36,7 @@ Funktionen des Plugins:
 Wichtige Info:
 In die config.yml müssen MySQL-Daten eingefügt werden, damit dieses Plugin funktioniert.
 Die angehängte Loots.yml kann benutzt werden, muss aber nicht zwangsweise. Wichtig ist, dass die loots.yml wie folgt aufgebaut ist:
+
 items:
   - ItemID:SubID, MAX-AMOUNT, CHANCE
 
