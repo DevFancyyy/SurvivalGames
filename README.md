@@ -1,22 +1,38 @@
 Dieses SurvivalGames-Plugin dient als Referenz für meine GommeHD.net Developer-Bewerbung.
 
 Befehle:
+
 /start: Der Countdown wird auf 15 Sekunden gesenkt.
+
 /stats: Zeigt eigene Stats an.
+
 /stats <Spielername>: Zeigt die Stats eines Spielers an
+
 /stats #n: Zeit die Stats des Spielers auf dem Platz n.
 
+
 /setup <start | end>: Den Setup-Modus betreten bzw. verlassen (Blöcke abbaubar, Inventar unbegrenzt nutzbar).
+
 /setup Waiting <setspawn | setworld>: Den Spawn / die Welt der Wartelobby setzen.
+
 /setup map list: Öffne eine Liste aller Maps.
+
 /setup map <map> info>§7: Rufe Infos zu einer Map ab.
+
 /setup map <create | delete> <mapname>§7: Erstelle / Lösche eine Map.
+
 /setup map <map> spawn add§7: Erstelle einen Spawnpunkt.
+
 /setup map <map> spawn list§7: Liste die Spawnpunkte einer Map auf.
+
 /setup map <map> spawn tp <id>§7: Teleportiere dich zu dem Spawnpunkt.
+
 /setup map <map> spawn delete <id>§7: Lösche einen Spawnpunk.
+
 /setup map <map> set <center | world>§7: Setze die Welt / den Mittelpunkt.
+
 /setup map <map> set <border | maxplayer | minplayer> <Wert>: Setze den entsprechenden Wert für die angegebene Map.
+
 
 Stats und Achievements:
 Es gibt 5 verschiedene Achievements, sowie die Speicherung von gespielten, gewonnenen und verlorenen Spielen sowie von den Kills und den Deaths.
